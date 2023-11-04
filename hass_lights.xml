@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="hass" model="lights" device_class="Lighting_controller" rpm_xml_version="1.16" minimum_component_engine_version="7.2">
+     <notes>
+     </notes>
+
+     <control_interfaces preferred="ip">
+        <ip port="8123" response_time_length_ms="500" name_on_component="Ethernet" protocol="http">
+        
+       
+        <http_header name="Authorization">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2M2M2MzE4ZmVhZTE0YmUwODYzNTk0YzY4NDdkNzc0NSIsImlhdCI6MTY3MTg2ODExNiwiZXhwIjoxOTg3MjI4MTE2fQ._8WCOi9gXPPzQ3pggVl5LwsnDpwlaXC5zlZ-7F3EJvw</http_header>
+        
+        </ip>
+    </control_interfaces>
+     
+     
+     <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="8123"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="Lighting Controller"> 
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_LIGHTINGCONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+
+    <state_variable_list>
+
+    </state_variable_list>
+
+    <logical_component logical_component_name="Lighting_controller">
+        <implementation>
+            <internal name_on_component="Lighting Controller"></internal>
+        </implementation>     
+
+        <status_messages>
+            <status_message name="UpdateState">
+                <root_object name="none" matches_required="at_least_one" format="json">
+                    <values path="/none/state" matches_required="at_least_one">
+                        <value_map match_required="yes">
+                            <map key="on">
+                                <update state="IsLightOn_1" type="boolean">true</update>
+                                <update state="CurrentLightStatus_1" type="string">ON</update>
+                            </map>
+                            <map key="off">
+                                <update state="IsLightOn_1" type="boolean">false</update>
+                                <update state="CurrentLightStatus_1" type="string">OFF</update>
+                            </map>
+                        </value_map>
+                    </values>
+                    
+                </root_object>
+            </status_message>
+
+            <status_message name="DimmerValue">
+                <root_object name="none" matches_required="at_least_one" format="json">
+                    <values path="/none/brightness" matches_required="at_least_one">
+                        <update state="CurrentBrightness" type="string"></update>
+
+                    </values>
+                </root_object>
+            </status_message>
+
+
+        </status_messages>
+
+        <resource_component_actions resource_type="ENV_LIGHTINGCONTROLLER_SOURCE">
+
+            <action name="SwitchOn">
+                <action_argument name="Address1" note="HA EntityID"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="yes">
+                        <command_string type="character" http_request_type="POST">api/services/light/turn_on</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="Address1"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;}</parameter>
+                        </parameter_list>
+                        
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="SwitchOff">
+                <action_argument name="Address1" note="HA EntityID"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="yes">
+                        <command_string type="character" http_request_type="POST">api/services/light/turn_off</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="Address1"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;}</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="DimmerSet">
+                <action_argument name="Address1" note="1"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <action_argument name="DimmerLevel" note="0-100"/>
+                <action_argument name="FadeTime" note="not used"/>
+                <action_argument name="DelayTime" note="not used"/>
+                <update_state_variable  name="math" update_type="set" update_source="action_argument">DimmerLevel</update_state_variable>
+                <update_state_variable name="math" update_type="multiply" update_source="constant">255</update_state_variable>
+                <update_state_variable name="math" update_type="divide" update_source="constant">100</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">42000000</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="math"></parameter>
+                            <parameter parameter_data_type="hex">000F</parameter>
+                            <checksum_parameter parameter_data_type="hex" parameter_data_width="1" parameter_total_width="1"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">818A8B</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" parameter_data_width="1" parameter_total_width="1"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="UpdateStatus">
+                <action_argument name="Address1" note="HA EntityID"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                            <parameter action_argument="Address1" parameter_data_type="character"></parameter>
+                        </parameter_list>
+                        </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"/>
+                <execute_on_schedule period_ms="60000"/>
+            </action>
+
+
+
+
+
+
+            
+            <entity name="Brightness" address_components="1">
+                <slider_representation>
+                    <press_action name="DimmerSet"></press_action>
+                    <valueSource name="CurrentBrightness">
+                        <unique_identifier name="Address1" address_component="1"/>
+                    </valueSource>
+                </slider_representation>
+                <query_status_with_action name="UpdateStatus" period_ms="0">
+                </query_status_with_action>
+            </entity>
+            
+            
+
+            
+
+
+
+
+            
+            
+            <entity name="Switch" address_components="1">
+                <toggle_button_representation>
+                    <release_action name="SwitchOn">
+                    </release_action>
+                    <toggle_release_action name="SwitchOff">
+                    </toggle_release_action>
+                    <osd_press_action name="SwitchOn">
+                    </osd_press_action>
+                    <osd_hold_action name="SwitchOff">
+                    </osd_hold_action>
+                    <toggleOnUsingState name="IsLightOn">
+                        <unique_identifier name="Address1" address_component="1"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="UpdateStatus" period_ms="0">
+                </query_status_with_action>
+            </entity>
+        
+            
+
+
+
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="UpdateState">
+                <action_argument name="Address1" note="HA EntityID"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                            <parameter action_argument="Address1" parameter_data_type="character"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                        </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"/>
+                <execute_on_schedule period_ms="30000"/>
+            </action>
+        </custom_component_actions>
+
+ 
+    </logical_component>
+</component>
