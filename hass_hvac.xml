@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="hass" model="hvac" device_class="HVAC_controller" minimum_component_engine_version="9.4.3" rpm_xml_version="1.00">
+    <notes>
+
+       
+        
+        
+    </notes>
+    <component_properties>
+        <always_repeat_input_selection>true</always_repeat_input_selection>
+    </component_properties>
+    <control_interfaces preferred="ip">
+        <ip port="8123" response_time_length_ms="500" name_on_component="Ethernet" protocol="http">
+        
+       
+        <http_header name="Authorization">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2M2M2MzE4ZmVhZTE0YmUwODYzNTk0YzY4NDdkNzc0NSIsImlhdCI6MTY3MTg2ODExNiwiZXhwIjoxOTg3MjI4MTE2fQ._8WCOi9gXPPzQ3pggVl5LwsnDpwlaXC5zlZ-7F3EJvw</http_header>
+        
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="8123"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="HVAC Controller_1 Setpoint">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
+        </internal>
+        <internal name_on_component="HVAC Controller_2 Setpoints">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_SINGLE_SETPOINT_HVACCONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    
+    <state_variable_list>
+        <state_variable name="FanSpeed" state_center_type="integer" min_value="1" max_value="7" note="Desired Fan Speed" owning_logical_component="HVAC_controller" user_editable="yes">1</state_variable>
+        <state_variable name="FanSpeedLow" state_center_type="integer" state_center_binding="FanSpeedLow" owning_logical_component="HVAC_controller">1</state_variable>
+        <state_variable name="FanSpeedMidLow" state_center_type="integer" state_center_binding="FanSpeedMidLow" owning_logical_component="HVAC_controller">2</state_variable>
+        <state_variable name="FanSpeedMid" state_center_type="integer" state_center_binding="FanSpeedMid" owning_logical_component="HVAC_controller">2</state_variable>
+        <state_variable name="FanSpeedMidHigh" state_center_type="integer" state_center_binding="FanSpeedMidHigh" owning_logical_component="HVAC_controller">4</state_variable>
+        <state_variable name="FanSpeedHigh" state_center_type="integer" state_center_binding="FanSpeedHigh" owning_logical_component="HVAC_controller">3</state_variable>
+        <state_variable name="ThermostatCurrentCoolPoint" state_center_type="integer" state_center_binding="ThermostatCurrentCoolPoint" owning_logical_component="HVAC_controller"></state_variable>
+        <state_variable name="ThermostatCurrentHeatPoint" state_center_type="integer" state_center_binding="ThermostatCurrentHeatPoint" owning_logical_component="HVAC_controller"></state_variable>
+        <state_variable name="ThermostatCurrentSetPoint" state_center_type="integer" state_center_binding="ThermostatCurrentSetPoint" owning_logical_component="HVAC_controller"></state_variable>
+        <!--<state_variable name="Current_Auto_Temp_Min_Interval" min_value="2" max_value="10" owning_logical_component="HVAC_controller">3</state_variable>-->
+    </state_variable_list>
+
+    

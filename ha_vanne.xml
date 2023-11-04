@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="ha"
+    model="vanne" device_class="HVAC_controller"
+    minimum_component_engine_version="9.4.3" rpm_xml_version="2.11" rpm_xml_version_date="$Date$" alias="Vanne Xiaomi">
+    <notes>
+    
+
+    </notes>
+    
+    <component_properties>
+        <always_repeat_input_selection>true</always_repeat_input_selection>
+    </component_properties>
+    <control_interfaces preferred="ip">
+        <ip port="8123" response_time_length_ms="500" name_on_component="Ethernet" protocol="http">
+        
+       
+        <http_header name="Authorization">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2M2M2MzE4ZmVhZTE0YmUwODYzNTk0YzY4NDdkNzc0NSIsImlhdCI6MTY3MTg2ODExNiwiZXhwIjoxOTg3MjI4MTE2fQ._8WCOi9gXPPzQ3pggVl5LwsnDpwlaXC5zlZ-7F3EJvw</http_header>
+        
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="8123"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="HVAC Controller">
+            <environmental_media/>
+            <resource resource_type="ENV_SINGLE_SETPOINT_HVACCONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <!-- 44 - 113 F, 9-32 C-->
+       
+        <!-- 
+        <state_variable name="CurrentWorkingSetPoint" min_value="0" max_value="40" owning_logical_component="HVAC_controller" state_center_binding="ThermostatCurrentSetPoint" state_center_type="string" receive_updates_from_state_center="yes">10</state_variable> 
+         -->
+         <state_variable name="Current_Set_Point_Setting" owning_logical_component="HVAC_controller" state_center_type="string" state_center_binding="ThermostatCurrentSetPoint"></state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="HVAC_Controller">
+        <implementation>
+            <internal name_on_component="HVAC Controller"></internal>
+        </implementation>
+        <status_messages>
+
+            <status_message name="HVACStatus">
+                <root_object name="none" format="json" matches_required="at_least_one">
+                    <values path="/none/entity_id" matches_required="none">
+                        <update state="ThermostatAddress" type="string"/>
+                        <update state="entity_id" type="string"/>
+                    </values>            
+
+                    <values path="/none/attributes/current_temperature" matches_required="none">
+                        <update state="ThermostatCurrentTemperature" type="string"/>
+                    </values>
+
+                    <values path="/none/attributes/temperature" matches_required="none">
+                        <update state="ThermostatCurrentSetPoint" type="string"/>
+                    </values>
+                </root_object>
+                <append_data_to_state_names state="ThermostastAddress"/>
+            </status_message>
+
+
+            <status_message name="ThermostatCurrentOperatingMode">
+                <root_object name="none" format="json" matches_required="at_least_one">
+                    
+                    <values path="/none/attributes/state" matches_required="none">
+                        <value_map match_required="yes">
+                            
+                            <map key="heat">
+                                <update state="ThermostatMode" type="string">HEAT</update>
+                                <update state="IsCurrentHVACModeHeat" type="boolean">true</update>
+                                <update state="IsCurrentHVACModeCool" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeAuto" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeOff" type="boolean">false</update>
+                            </map>
+                            <map key="off">
+                                <update state="ThermostatMode" type="string">OFF</update>
+                                <update state="IsCurrentHVACModeHeat" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeCool" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeAuto" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeOff" type="boolean">true</update>
+                            </map>
+                            <map key="cool">
+                                <update state="ThermostatMode" type="string">COOL</update>
+                                <update state="IsCurrentHVACModeHeat" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeCool" type="boolean">true</update>
+                                <update state="IsCurrentHVACModeAuto" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeOff" type="boolean">false</update>
+                            </map>
+                            <map key="auto">
+                                <update state="ThermostatMode" type="string">AUTO</update>
+                                <update state="IsCurrentHVACModeHeat" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeCool" type="boolean">false</update>
+                                <update state="IsCurrentHVACModeAuto" type="boolean">true</update>
+                                <update state="IsCurrentHVACModeOff" type="boolean">false</update>
+                            </map>
+
+
+
+
+
+                        </value_map>
+                    </values>            
+
+                </root_object>
+                <append_data_to_state_names state="ThermostatAddress" note="Thermostat (EntityID)"/>
+            </status_message>
+
+           
+        </status_messages>
+        <resource_component_actions resource_type="ENV_SINGLE_SETPOINT_HVACCONTROLLER_SOURCE">
+            <!-- Heat -->
+
+            <action name="SetSingleSetPointTemperature">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <action_argument name="SetPointTemperature" note="Temperature Bound for Heat Operation in C"/>
+                
+                <update_state_variable name="Current_Set_Point_Setting" update_type="set" update_source="action_argument">SetPointTemperature</update_state_variable>
+
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="POST">devices/services/climate/set_temperature</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;,&quot;temperature&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="Current_Set_Point_Setting"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;}</parameter>
+                        </parameter_list>
+                        <delay ms_delay="2000"/>
+                    </command>
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                            <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>
+                            
+                            
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+
+            </action>
+
+            <action name="IncreaseSingleSetPointTemperature">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <update_state_variable name="Current_Set_Point_Setting" update_type="increment" update_source="constant">1</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="POST">devices/services/climate/set_temperature</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;,&quot;temperature&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="Current_Set_Point_Setting"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;}</parameter>
+                        </parameter_list>
+                        <delay ms_delay="2000"/>
+                    </command>
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                            <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="DecreaseSingleSetPointTemperature">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <update_state_variable name="Current_Set_Point_Setting" update_type="decrement" update_source="constant">1</update_state_variable>
+                
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="POST">devices/services/climate/set_temperature</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;,&quot;temperature&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="Current_Set_Point_Setting"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;}</parameter>
+                        </parameter_list>
+                        <delay ms_delay="2000"/>
+                    </command>
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                            <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>
+                           
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <!-- Modes -->
+
+            
+            
+            <action name="SetHVACModeHeat">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="POST">api/services/climate/set_hvac_mode</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;,&quot;hvac_mode&quot;:&quot;heat&quot;}</parameter>
+                        </parameter_list>
+                        <delay ms_delay="2000"/>
+                    </command>
+
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                            <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>
+                            
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+
+                </command_interface>
+            </action>
+            
+            
+        
+           
+            
+            <action name="SetHVACModeOff">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <http_header name="Content-Type">application/json</http_header>
+                        <command_string type="character" http_request_type="POST">api/services/climate/turn_off</command_string>
+                        <parameter_list>
+                            <parameter isHttpBody="true" parameter_data_type="character">{&quot;entity_id&quot;:&quot;</parameter>
+                            <parameter isHttpBody="true" parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter isHttpBody="true" parameter_data_type="character">&quot;}</parameter>
+                        </parameter_list>
+                        <delay ms_delay="2000"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">api/states/</command_string>
+                        <parameter_list>
+                           <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>    
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="QueryHVACMode">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <command response_required="no">
+                    <command_string type="character" http_request_type="GET">api/states/</command_string>
+                    <parameter_list>
+                       <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>    
+                    </parameter_list>
+                    <delay ms_delay="2000"/>
+                </command>
+                </command_interface>
+            </action>
+            
+            
+            
+            <entity name="Zone" address_components="1">
+                <screen_representation>
+                    <common_unique_identifier name="ThermostatAddress" address_component="1"/>
+                    
+                </screen_representation>
+            </entity>
+            
+
+        </resource_component_actions>
+
+        <custom_component_actions>
+            <action name="QueryHVACStatus">
+                <action_argument name="ThermostatAddress" note="Thermostat device_id"/>
+                <action_argument name="ThermostatAddress2" note="not used"/>
+                <command response_required="no">
+                    <command_string type="character" http_request_type="GET">api/states</command_string>
+                    <parameter_list>
+                       <parameter action_argument="ThermostatAddress" parameter_data_type="character"/>    
+                    </parameter_list>
+                    
+                </command>
+                <execute_on_schedule period_ms="0"/>
+                <execute_on_schedule period_ms="30000"/>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>
