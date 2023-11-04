@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd"
-    manufacturer="Esphome" model="linky_V2" alias="esphome linky Gateway " device_class="Energy_Resource_monitor"
-        minimum_component_engine_version="10.2" rpm_xml_version="1.29">
+    manufacturer="esphome" model="linky" alias="Esphome linky Gateway " device_class="Energy_Resource_monitor"
+        minimum_component_engine_version="10.2" rpm_xml_version="1.21">
     
     <notes>
         
@@ -24,10 +24,10 @@
         <data name_on_component="Ethernet">
             <combined_media>
                 <data_media type="ethernet"></data_media>
-                <control port="80"></control>
+                <control port="1880"></control>
             </combined_media>
         </data>
-        
+   
    
         <internal name_on_component="Resource Monitor">
             <environmental_media></environmental_media>
@@ -49,7 +49,25 @@
         </implementation>
         
 
-            
+            <status_messages>
+                <status_message name="Updates">
+                <root_object name="none" format="json" matches_required="at_least_one">
+             
+                    <values path="/none/value" matches_required="none">
+                        <update state="Chan1Power" type="integer"></update>
+                    </values>
+                    <values path="/none/value" matches_required="none">
+                        <update state="Chan2Power" type="integer"></update>
+                    </values>
+                    <values path="/none/value" matches_required="none">
+                        <update state="Chan3Power" type="integer"></update>
+                    </values>
+                        <values path="/none" matches_required="none">
+                        <update state="throwaway2" type="string"></update>
+                    </values>
+                 </root_object>
+           </status_message>
+        </status_messages>
         
         <resource_component_actions resource_type="ENV_ENERGYRESOURCEMONITOR_SOURCE">
             <action name="SetGraphTypeDay">
@@ -111,32 +129,14 @@
         <custom_component_actions>
             <action name="GetTotalPower">
                 <command_interface interface="ip">
-                    <command response_required="yes">
-                    <http_header name="Content-Type">application/json</http_header>
-                    
-                    <command_string type="character" http_request_type="GET">sensor/puissance</command_string>
-                    <response_codes>
-                        <rspmessage status="success" name="QueryPuissance">
-                            <constant type="character">200</constant>
-                            <root_object name="none" format="json" matches_required="at_least_one">
-                                <values path="/none/value" matches_required="at_least_one">
-                                    <update state="Chanel1Power" type="integer"/>
-                                </values>
+                    <command response_required="no">
+                    <command_string type="character">sensor/puissance</command_string>
                         
-                            <values path="/none" matches_required="none">
-                            <update state="throwaway2" type="string"></update>
-                        </values>
-                            </root_object>
-                        </rspmessage>
-                    </response_codes>   
                     </command>
                 </command_interface>
                 <execute_on_schedule period_ms="0"/>
                 <execute_on_schedule period_ms="10000"/>
             </action>
-            
-            
-            
         </custom_component_actions>
 
  </logical_component>
