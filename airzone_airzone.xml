@@ -3,26 +3,7 @@
      xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Airzone" model="Airzone" device_class="HVAC_controller" minimum_component_engine_version="9.4.3" rpm_xml_version="15.4">
     <notes>
 
-        15.4 : fan speed status
-        15.3 : Status fixes
-        15.2 : DSR toying with the profile
-
-        
-        Webserver Airzone Cloud Ethernet (AZX6WEMSCLOUDC or AZX6WSCLOUDDINC) must have the 3.1.6 version or higher.
-        
-        
-        
-        In Blueprint, only one HVAC service can be used from this profile. For this reason, "Single SetPoint HVAC Service" has been disabled by default in the services screen. If this is needed, disable the "HVAC Service" and enable "Single SetPoint HVAC Service".
-        
-
-
-        In order to set the desired Fan Speed: 
-        - Open the device in Inspector in Blueprint
-        - Select "State Variables" from the drop-down
-        - Enter an "Initial Value" of 1-7 in the "Fan Speed" section.**
-        ** Each device has an upper limit for fan speed. Some devices go as high as 7. Others go as high as 3. Check "AvailableFanSpeeds" in System State of System Monitor to determine upper limit.
-        
-        
+       
     </notes>
     <component_properties>
         <disable_resources_by_default resource_type="ENV_SINGLE_SETPOINT_HVACCONTROLLER_SOURCE"/>
