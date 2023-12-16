@@ -6,7 +6,14 @@
     
     <control_interfaces preferred="ip">
       <ip port="443" response_time_length_ms="8000" name_on_component="ETHERNET" protocol="https-insecure">
-		<response_codes>
+		
+        <http_header name="Authorization">Basic c2F2YW50OkRzcl8yMDAy</http_header>
+                <http_header name="Content-Type">application/json</http_header>
+                <send_prefix type="character"></send_prefix>
+                <send_postfix type="character"></send_postfix>
+        
+        
+        <response_codes>
 		  <rspcode message_name="200" status="success" type="character">200</rspcode>
 		</response_codes>
         </ip>
