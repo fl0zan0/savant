@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component manufacturer="Wiim" model="Ultra" rpm_xml_version="1.43" minimum_component_engine_version="0.0" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" device_class="Media_server">
+    <notes>
+     
+    </notes>
+    <component_properties>
+        <always_repeat_input_selection>true</always_repeat_input_selection>
+    </component_properties>
+    <control_interfaces preferred="ip">
+        <ip name_on_component="LAN" response_time_length_ms="500" port="443" protocol="https-insecure">
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="OPTICAL IN">
+            <audio_media type="optical_digital"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            
+        </input>
+        
+        <input name_on_component="AUDIO IN">
+            <audio_media type="rca_stereo"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            
+        </input>
+        <input name_on_component="PHONO IN">
+            <audio_media type="rca_stereo"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+           
+        </input>
+        <input name_on_component="HDMI eARC">
+            <audio_media type="hdmi_audio"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            
+        </input>
+        <output name_on_component="AUDIO OUT">
+            <audio_media type="rca_stereo"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+        </output>
+        <output name_on_component="COAX OUT">
+            <audio_media type="coaxial_digital"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+        </output>
+        <output name_on_component="OPTICAL OUT">
+            <audio_media type="optical_digital"></audio_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+        </output>
+        <output name_on_component="SUBW OUT">
+            <audio_media type="subwoofer_rca"></audio_media>
+        </output>
+        <data name_on_component="LAN">
+            <combined_media>
+                <data_media type="ethernet"></data_media>
+                <control port="443"></control>
+            </combined_media>
+        </data>
+        <internal name_on_component="Bluetooth">
+            <audio_media></audio_media>
+            
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+        </internal>
+
+        <internal name_on_component="Wifi">
+            <audio_media></audio_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+        </internal>
+        
+
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_Media Server" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Media Server">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Media Server" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Media Server">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Media Server" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Media Server" granularity="1" min_value="0" max_value="100">0</volume_state_variable>
+        <state_variable name="OpticalInputPreset" state_center_type="string" user_editable="yes" note="Name of Optical Input Preset">optical</state_variable>
+        <state_variable name="AudioInputPreset" state_center_type="string" user_editable="yes" note="Name of Audio Input Preset">line-in</state_variable>
+        <state_variable name="PhonoInputPreset" state_center_type="string" user_editable="yes" note="Name of Phono Input Preset">phono</state_variable>
+        <state_variable name="HDMIInputPreset" state_center_type="string" user_editable="yes" note="Name of HDMI Input Preset">HDMI</state_variable>
+        <state_variable name="WifiInputPreset" state_center_type="string" user_editable="yes" note="Name of Wifi Input Preset">wifi</state_variable>
+        <state_variable name="BluetoothInputPreset" state_center_type="string" user_editable="yes" note="Name of Bluetooth Input Preset">bluetooth</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="Media Server">
+        
+        <implementation>
+            <input name_on_component="PHONO IN">
+                <action_to_select name="SelectInputPHONO IN"></action_to_select>
+            </input>
+            <output name_on_component="AUDIO OUT"></output>
+            <output name_on_component="COAX OUT"></output>
+            <output name_on_component="OPTICAL OUT"></output>
+            <output name_on_component="SUBW OUT"></output>
+        </implementation>
+        
+        
+        <implementation>
+            <input name_on_component="OPTICAL IN">
+                <action_to_select name="SelectInputOPTICAL IN"></action_to_select>
+            </input>
+            <output name_on_component="AUDIO OUT"></output>
+            <output name_on_component="COAX OUT"></output>
+            <output name_on_component="OPTICAL OUT"></output>
+            <output name_on_component="SUBW OUT"></output>
+        </implementation>
+
+        <implementation>
+            <input name_on_component="HDMI eARC">
+                <action_to_select name="SelectInputHDMI eARC"></action_to_select>
+            </input>
+            <output name_on_component="AUDIO OUT"></output>
+            <output name_on_component="COAX OUT"></output>
+            <output name_on_component="OPTICAL OUT"></output>
+            <output name_on_component="SUBW OUT"></output>
+        </implementation>
+
+        <implementation>
+            <input name_on_component="AUDIO IN">
+                <action_to_select name="SelectInputAUDIO IN"></action_to_select>
+            </input>
+            <output name_on_component="AUDIO OUT"></output>
+            <output name_on_component="COAX OUT"></output>
+            <output name_on_component="OPTICAL OUT"></output>
+            <output name_on_component="SUBW OUT"></output>
+        </implementation>
+        
+        <implementation>
+            <internal name_on_component="Bluetooth">
+                <action_to_select name="SelectInputBluetooth"></action_to_select>
+            </internal>
+            <output name_on_component="AUDIO OUT"></output>
+            <output name_on_component="COAX OUT"></output>
+            <output name_on_component="OPTICAL OUT"></output>
+            <output name_on_component="SUBW OUT"></output>
+        </implementation>
+
+        <implementation>
+            <internal name_on_component="Wifi">
+                <action_to_select name="SelectInputWifi"></action_to_select>
+            </internal>
+            <output name_on_component="AUDIO OUT"></output>
+            <output name_on_component="COAX OUT"></output>
+            <output name_on_component="OPTICAL OUT"></output>
+            <output name_on_component="SUBW OUT"></output>
+        </implementation>
+
+
+        <status_messages>
+            <status_message name="Status">
+                <root_object name="none" format="json" matches_required="at_least_one">
+                    <values path="/none/Album" matches_required="at_least_one">
+                        <update state="CurrentAlbum" type="string"></update>
+                    </values>
+                    <values path="/none/Artist" matches_required="at_least_one">
+                        <update state="CurrentArtist" type="string"></update>
+                    </values>
+                    <values path="/none/name" matches_required="at_least_one">
+                        <update state="CurrentName" type="string"></update>
+                    </values>
+                    <values path="/none/vol" matches_required="at_least_one">
+                        <update state="CurrentVolume" type="integer"></update>
+                    </values>
+                    <values path="/none/status" matches_required="at_least_one">
+                        <update state="CurrentStatus" type="string"></update>
+                    </values>
+                </root_object>
+            </status_message>
+        </status_messages>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue" note="0-100"/>
+                <update_volume_variables name="Volume_current_volume_Media Server" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:vol:</command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="Volume_current_volume_Media Server" action_argument="VolumeValue" parameter_data_type="character"></volume_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Media Server" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Media Server" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:mute:0</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Media Server" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Media Server" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:mute:1</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <resource_component_actions resource_type="AV_EXTERNALMEDIASERVER_SOURCE">
+            <action name="Play">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:onepause</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Pause">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:pause</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Stop">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:stop</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SkipUp">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:next</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SkipDown">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:prev</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputOPTICAL IN">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:switchmode:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="OpticalInputPreset"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="SelectInputAUDIO IN">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:switchmode:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="AudioInputPreset"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputPHONO IN">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:switchmode:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="PhonoInputPreset"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputHDMI eARC">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:switchmode:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="HDMIInputPreset"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInternalInputWifi">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:switchmode:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="WifiInputPreset"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="SelectInternalInputBluetooth">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:switchmode:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="BluetoothInputPreset"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="LoadPreset">
+                <action_argument name="Value"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=MCUKeyShortClick:</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+             
+            <action name="LoadPreset1">
+                <action_argument name="Value"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=MCUKeyShortClick:1</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="LoadPreset2">
+                <action_argument name="Value"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=MCUKeyShortClick:2</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="LoadPreset3">
+                <action_argument name="Value"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=MCUKeyShortClick:3</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="LoadPreset4">
+                <action_argument name="Value"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=MCUKeyShortClick:4</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="SetShuffle">
+                <action_argument name="Value" note="0=Disable, 2=Enable"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:loopmode:2</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetRepeat">
+                <action_argument name="Value" note="0=Entire play queue, 1=Current track, 2=Off"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=setPlayerCmd:loopmode:-1</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryPlaybackStatus">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">httpapi.asp?command=getPlayerStatus</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+                <execute_on_schedule period_ms="30000"></execute_on_schedule>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>
